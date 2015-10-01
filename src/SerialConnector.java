@@ -8,7 +8,7 @@ import gnu.io.SerialPortEvent;
 import gnu.io.SerialPortEventListener;
 import java.util.Enumeration;
 
-public class SerialTest implements SerialPortEventListener {
+public class SerialConnector implements SerialPortEventListener {
 
 	private String line;
 
@@ -97,7 +97,7 @@ public class SerialTest implements SerialPortEventListener {
 		if (oEvent.getEventType() == SerialPortEvent.DATA_AVAILABLE) {
 			try {
 				String inputLine = input.readLine();
-				 System.out.println(inputLine);
+				// System.out.println(inputLine);
 				this.line = inputLine;
 			} catch (Exception e) {
 				System.err.println(e.toString());
@@ -108,7 +108,7 @@ public class SerialTest implements SerialPortEventListener {
 	}
 
 	public static void main(String[] args) throws Exception {
-		SerialTest main = new SerialTest();
+		SerialConnector main = new SerialConnector();
 		main.initialize();
 		Thread t = new Thread() {
 			public void run() {

@@ -9,10 +9,13 @@ import javax.swing.JLabel;
 
 public class Panel {
 
-	private SerialTest serial;
+	private SerialConnector serial;
 	private Timer timer;
 	private JLabel mag;
 	private JLabel acc;
+
+	private DatoAcelerometro acelerometro;
+	private DatoMagnetometro magnetometro;
 
 	public static void main(String[] args) {
 
@@ -29,7 +32,7 @@ public class Panel {
 
 	public Panel() {
 
-		serial = new SerialTest();
+		serial = new SerialConnector();
 		mag = new JLabel();
 		acc = new JLabel();
 		setupUI();
@@ -74,13 +77,20 @@ public class Panel {
 
 		String datos = serial.getLine();
 
-		if (datos != null && datos.length() > 3 && datos.substring(0, 3).equals("mag")) {
+		if (datos != null && datos.length() > 3) {
 
-			this.mag.setText(serial.getLine());
-		}
-		if (datos != null && datos.length() > 3 && datos.substring(0, 3).equals("acc")) {
+			String header = datos.substring(0, 3);
 
-			this.acc.setText(serial.getLine());
+			if (header.equals("mag")) {
+
+				this.magnetometro = new DatoMagnetometro(datos);
+				this.mag.setText(this.magnetometro.toString());
+
+			} else if (header.equals("acc")) {
+
+				this.acelerometro = new DatoAcelerometro(datos);
+				this.acc.setText(this.acelerometro.toString());
+			}
 		}
 	}
 
