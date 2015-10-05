@@ -4,6 +4,7 @@ public class DatoMagnetometro {
 	float x;
 	float y;
 	float z;
+	float heading;
 
 	public DatoMagnetometro(String datos) {
 
@@ -19,17 +20,14 @@ public class DatoMagnetometro {
 		string = string.replace("X", "");
 		string = string.replace("Y", "");
 		string = string.replace("Z", "");
+		string = string.replace("H", "");
 
 		String[] parts = string.split(";");
 
 		this.x = Float.valueOf(parts[0]);
 		this.y = Float.valueOf(parts[1]);
 		this.z = Float.valueOf(parts[2]);
-	}
-
-	@Override
-	public String toString() {
-		return "DatoMagnetometro [x=" + x + ", y=" + y + ", z=" + z + "]";
+		this.heading = Float.valueOf(parts[3]);
 	}
 
 }

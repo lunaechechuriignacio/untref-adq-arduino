@@ -1,21 +1,24 @@
+import java.awt.GraphicsConfiguration;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Timer;
 
+import javax.media.j3d.Canvas3D;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+
+import com.sun.j3d.utils.universe.SimpleUniverse;
 
 public class Panel {
 
 	private SerialConnector serial;
 	private Timer timer;
-	private JLabel mag;
-	private JLabel acc;
 
 	private DatoAcelerometro acelerometro;
 	private DatoMagnetometro magnetometro;
+
+	private Brujula3D brujula;
 
 	public static void main(String[] args) {
 
@@ -33,8 +36,6 @@ public class Panel {
 	public Panel() {
 
 		serial = new SerialConnector();
-		mag = new JLabel();
-		acc = new JLabel();
 		setupUI();
 	}
 
@@ -51,17 +52,26 @@ public class Panel {
 		constraints.fill = GridBagConstraints.BOTH;
 		constraints.gridx = 0;
 		constraints.gridy = 0;
-		constraints.gridwidth = 1;
-		constraints.gridheight = 1;
-		frame.getContentPane().add(mag, constraints);
+		constraints.weightx = 1;
+		constraints.weighty = 1;
+		// constraints.gridwidth = 1;
+		// constraints.gridheight = 1;
+		// frame.getContentPane().add(mag, constraints);
 
-		constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.gridx = 0;
-		constraints.gridy = 1;
-		constraints.gridwidth = 1;
-		constraints.gridheight = 1;
-		frame.getContentPane().add(acc, constraints);
+		// constraints = new GridBagConstraints();
+		// constraints.fill = GridBagConstraints.BOTH;
+		// constraints.gridx = 0;
+		// constraints.gridy = 1;
+		// constraints.gridwidth = 1;
+		// constraints.gridheight = 1;
+		// frame.getContentPane().add(acc, constraints);
+
+		GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
+		Canvas3D canvas = new Canvas3D(config);
+
+		brujula = new Brujula3D(canvas);
+
+		frame.getContentPane().add(canvas, constraints);
 
 		frame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
@@ -83,15 +93,16 @@ public class Panel {
 
 			if (header.equals("mag")) {
 
+				System.out.println(datos);
 				this.magnetometro = new DatoMagnetometro(datos);
-				this.mag.setText(this.magnetometro.toString());
+				brujula.rotate(this.magnetometro);
 
 			} else if (header.equals("acc")) {
 
 				this.acelerometro = new DatoAcelerometro(datos);
-				this.acc.setText(this.acelerometro.toString());
 			}
 		}
+
 	}
 
 }

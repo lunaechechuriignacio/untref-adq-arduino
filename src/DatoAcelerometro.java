@@ -37,10 +37,4 @@ public class DatoAcelerometro {
 		this.temperature = Float.valueOf(parts[6]);
 	}
 
-	@Override
-	public String toString() {
-		return "DatoAcelerometro [x=" + x + ", y=" + y + ", z=" + z + ", gx=" + gx + ", gy=" + gy + ", gz=" + gz
-				+ ", temperature=" + temperature + "]";
-	}
-
 }
