@@ -111,6 +111,7 @@ public class SerialConnector implements SerialPortEventListener {
 		SerialConnector main = new SerialConnector();
 		main.initialize();
 		Thread t = new Thread() {
+
 			public void run() {
 				// the following line will keep this app alive for 1000 seconds,
 				// waiting for events to occur and responding to them (printing
@@ -129,4 +130,5 @@ public class SerialConnector implements SerialPortEventListener {
 
 		return this.line;
 	}
+
 }

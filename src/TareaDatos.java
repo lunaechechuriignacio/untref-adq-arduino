@@ -2,17 +2,18 @@ import java.util.TimerTask;
 
 public class TareaDatos extends TimerTask {
 
-	private Panel panel;
+	private Ventana ventana;
 
-	public TareaDatos(Panel panel) {
+	public TareaDatos(Ventana panel) {
 
-		this.panel = panel;
+		this.ventana = panel;
 	}
 
 	@Override
 	public void run() {
 
-		panel.recolectarDatos();
+		ventana.recolectarDatos();
+		ventana.actualizarLabels();
 	}
 
 }
