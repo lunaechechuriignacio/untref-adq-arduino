@@ -3,7 +3,8 @@ import java.awt.GraphicsConfiguration;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.awt.Label;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.Timer;
@@ -11,19 +12,21 @@ import java.util.Timer;
 import javax.media.j3d.Canvas3D;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.vecmath.Vector3f;
 
 import com.sun.j3d.utils.universe.SimpleUniverse;
 
-public class Ventana {
+public class Ventana implements ActionListener {
 
 	private SerialConnector serial;
 	private Timer timer;
 	private DatoAcelerometro acelerometro;
+	private DatoAcelerometro acelerometroBase;
 	private DatoMagnetometro magnetometro;
 	private Brujula3D brujula;
+	private Tracking3D tracking;
 	private Panel panel;
+	private Vector3f posicion;
 
 	public static void main(String[] args) {
 
@@ -35,13 +38,16 @@ public class Ventana {
 
 		serial.initialize();
 		this.timer = new Timer();
-		timer.schedule(new TareaDatos(this), 0, 1);
+		timer.schedule(new TareaDatos(this), 0, 10);
 	}
 
 	public Ventana() {
 
 		serial = new SerialConnector();
 		setupUI();
+		this.acelerometro = new DatoAcelerometro();
+		this.magnetometro = new DatoMagnetometro();
+		this.posicion = new Vector3f();
 	}
 
 	private void setupUI() {
@@ -51,14 +57,15 @@ public class Ventana {
 
 		frame.getContentPane().setLayout(new GridBagLayout());
 
-		panel = new Panel();
+		panel = new Panel(this);
 		panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
 		frame.getContentPane().add(panel, generateConstraints(1, 0));
 
 		GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
 		Canvas3D canvas = new Canvas3D(config);
-		brujula = new Brujula3D(canvas);
+		// brujula = new Brujula3D(canvas);
+		tracking = new Tracking3D(canvas);
 
 		frame.getContentPane().add(canvas, generateConstraints(0, 0));
 
@@ -97,9 +104,8 @@ public class Ventana {
 
 			if (header.equals("mag")) {
 
-				System.out.println(datos);
 				this.magnetometro = new DatoMagnetometro(datos);
-				brujula.rotate(this.magnetometro);
+				// brujula.rotate(this.magnetometro);
 
 			} else if (header.equals("acc")) {
 
@@ -108,9 +114,42 @@ public class Ventana {
 		}
 	}
 
+	public void calcularTracking() {
+
+		if (acelerometroBase != null) {
+			float diferencia;
+
+			diferencia = acelerometro.x - acelerometroBase.x;
+			if (Math.abs(diferencia) > 200) {
+				posicion.y = posicion.y + diferencia / 500000;
+				tracking.move(posicion);
+			}
+
+			diferencia = acelerometro.y - acelerometroBase.y;
+			if (Math.abs(diferencia) > 200) {
+				posicion.x = posicion.x + diferencia / 500000;
+				tracking.move(posicion);
+			}
+//
+//			diferencia = acelerometro.z - acelerometroBase.z;
+//			if (Math.abs(diferencia) > 2000) {
+//				posicion.z = posicion.z + diferencia / 1000000;
+//				tracking.move(posicion);
+//			}
+		}
+	}
+
 	public void actualizarLabels() {
 
 		this.panel.actualizarLabels(magnetometro, acelerometro);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+		if (e.getActionCommand() == "BASE") {
+			this.acelerometroBase = acelerometro;
+		}
 	}
 
 }

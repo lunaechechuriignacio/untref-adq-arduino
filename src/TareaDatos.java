@@ -14,6 +14,7 @@ public class TareaDatos extends TimerTask {
 
 		ventana.recolectarDatos();
 		ventana.actualizarLabels();
+		ventana.calcularTracking();
 	}
 
 }

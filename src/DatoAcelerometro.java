@@ -8,6 +8,10 @@ public class DatoAcelerometro {
 	float gy;
 	float gz;
 	float temperature;
+	
+	public DatoAcelerometro() {
+		
+	}
 
 	public DatoAcelerometro(String datos) {
 

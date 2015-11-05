@@ -70,11 +70,11 @@ public class Brujula3D {
 		this.transform = new Transform3D();
 		Transform3D temp = new Transform3D();
 
-		temp.rotX(Math.atan2(magnetometro.z, magnetometro.y));
-		this.transform.mul(temp);
-
-		temp.rotY(Math.atan2(magnetometro.z, magnetometro.x));
-		this.transform.mul(temp);
+//		temp.rotX(Math.atan2(magnetometro.z, magnetometro.y));
+//		this.transform.mul(temp);
+//
+//		temp.rotY(Math.atan2(magnetometro.z, magnetometro.x));
+//		this.transform.mul(temp);
 
 		temp.rotZ(Math.atan2(magnetometro.y, magnetometro.x));
 		this.transform.mul(temp);

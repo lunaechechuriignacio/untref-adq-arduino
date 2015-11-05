@@ -6,6 +6,10 @@ public class DatoMagnetometro {
 	float z;
 	float heading;
 
+	public DatoMagnetometro() {
+
+	}
+	
 	public DatoMagnetometro(String datos) {
 
 		this.parseString(datos);

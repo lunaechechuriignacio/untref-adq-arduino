@@ -2,6 +2,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -33,13 +34,17 @@ public class Panel extends JPanel {
 	private JLabel labelBrujulaValue = new JLabel();
 	private JLabel labelTemperatura = new JLabel();
 	private JLabel labelTemperaturaValue = new JLabel();
+	private JButton buttonBase = new JButton();
 
-	public Panel() {
+	public Panel(Ventana ventana) {
 
 		this.setLayout(new GridBagLayout());
 
 		this.setElementsText();
 		this.addElements();
+
+		buttonBase.addActionListener(ventana);
+		buttonBase.setActionCommand("BASE");
 	}
 
 	private void setElementsText() {
@@ -69,6 +74,7 @@ public class Panel extends JPanel {
 		labelBrujulaValue.setText("0");
 		labelTemperatura.setText("Temperatura:");
 		labelTemperaturaValue.setText("0 °C");
+		buttonBase.setText("Base");
 	}
 
 	private void addElements() {
@@ -98,6 +104,7 @@ public class Panel extends JPanel {
 		this.add(labelBrujulaValue, generateConstraints(1, 13));
 		this.add(labelTemperatura, generateConstraints(0, 14));
 		this.add(labelTemperaturaValue, generateConstraints(1, 14));
+		this.add(buttonBase, generateConstraints(0, 15));
 	}
 
 	private GridBagConstraints generateConstraints(int x, int y) {
