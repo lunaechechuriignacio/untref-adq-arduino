@@ -25,6 +25,7 @@ public class Ventana implements ActionListener {
 	private DatoMagnetometro magnetometro;
 	private Brujula3D brujula;
 	private Tracking3D tracking;
+	private Gyro3D gyro;
 	private Panel panel;
 	private Vector3f posicion;
 
@@ -65,7 +66,7 @@ public class Ventana implements ActionListener {
 		GraphicsConfiguration config = SimpleUniverse.getPreferredConfiguration();
 		Canvas3D canvas = new Canvas3D(config);
 		// brujula = new Brujula3D(canvas);
-		tracking = new Tracking3D(canvas);
+		gyro = new Gyro3D(canvas);
 
 		frame.getContentPane().add(canvas, generateConstraints(0, 0));
 
@@ -130,12 +131,34 @@ public class Ventana implements ActionListener {
 				posicion.x = posicion.x + diferencia / 500000;
 				tracking.move(posicion);
 			}
-//
-//			diferencia = acelerometro.z - acelerometroBase.z;
-//			if (Math.abs(diferencia) > 2000) {
-//				posicion.z = posicion.z + diferencia / 1000000;
-//				tracking.move(posicion);
-//			}
+			//
+			// diferencia = acelerometro.z - acelerometroBase.z;
+			// if (Math.abs(diferencia) > 2000) {
+			// posicion.z = posicion.z + diferencia / 1000000;
+			// tracking.move(posicion);
+			// }
+		}
+	}
+
+	public void calcularGyro() {
+
+		if (acelerometroBase != null) {
+			float diferencia;
+
+			diferencia = acelerometro.gx - acelerometroBase.gx;
+			if (Math.abs(diferencia) > 100) {
+				gyro.rotate(acelerometro);
+			}
+			
+			diferencia = acelerometro.gy - acelerometroBase.gy;
+			if (Math.abs(diferencia) > 100) {
+				gyro.rotate(acelerometro);
+			}
+			
+			diferencia = acelerometro.gz - acelerometroBase.gz;
+			if (Math.abs(diferencia) > 100) {
+				gyro.rotate(acelerometro);
+			}
 		}
 	}
 
